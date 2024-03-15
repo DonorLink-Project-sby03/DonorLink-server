@@ -1,3 +1,4 @@
+const { verifyToken } = require("../helpers/jwt")
 const User = require("../models/user")
 
 async function authentication(req,res,next){
@@ -8,7 +9,7 @@ async function authentication(req,res,next){
         }
 
         let token = authorization.split(' ')[1]
-        // token = 
+        token = verifyToken(token)
 
         let findUser = await User.findByPk(token.id)
         if(!findUser){
