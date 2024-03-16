@@ -1,7 +1,7 @@
 const User = require("../models/user")
 
 class ControllerUser {
-    static async register(req,res,next){
+    static async register(req, res, next) {
         try {
             let { name, email, username, password } = req.body
 
@@ -13,7 +13,7 @@ class ControllerUser {
         }
     }
 
-    static async findUser (req,res,next){
+    static async findUser(req, res, next) {
         try {
             let user = await User.findByPk(req.user.id)
 
@@ -23,6 +23,39 @@ class ControllerUser {
                 username: user.username,
                 email: user.email
             })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    static async login(req, res, next) {
+        try {
+            const { email, password } = req.body
+            if (!email || !password) {
+                throw { name: "Badrequest", message: "Email and password is required" }
+            }
+            const user = await user.findOne({
+                where: {
+                    email
+                }
+            })
+            if (!user) {
+                throw { name: "Unauthorized", message: "Invalid email/password" }
+            }
+
+            const compare = comparePassword(password, user.password)
+            if (!compare) {
+                throw { name: "Unauthorized", message: "Invalid email/password" }
+            }
+
+            const createToken = signToken({
+                id: user.id
+            })
+
+            res.status(200).json({
+                access_token: createToken
+            })
+
         } catch (error) {
             next(error)
         }
