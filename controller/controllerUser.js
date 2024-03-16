@@ -1,7 +1,7 @@
 const User = require("../models/user")
 
 class ControllerUser {
-    static async register(req,res,next){
+    static async register(req, res, next) {
         try {
             let { name, email, username, password } = req.body
 
@@ -13,7 +13,7 @@ class ControllerUser {
         }
     }
 
-    static async findUser (req,res,next){
+    static async findUser(req, res, next) {
         try {
             let user = await User.findByPk(req.user.id)
 
