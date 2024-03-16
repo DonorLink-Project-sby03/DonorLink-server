@@ -22,6 +22,7 @@ const errorHandler = (err, req, res, next) => {
             break;
     }
 
+    console.log(err,'<<< error middleware');
     res.status(status).json({ message })
 }
 

@@ -1,10 +1,11 @@
 const { verifyToken } = require("../helpers/jwt")
-const User = require("../models/user")
+const { User } = require("../models/index")
 
 async function authentication(req,res,next){
     try {
         let { authorization } = req.headers
-        if(authorization){
+        
+        if(!authorization){
             throw {name: "Unauthorized", message: "Invalid Token"}
         }
 
