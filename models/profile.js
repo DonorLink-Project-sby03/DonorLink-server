@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Profile.belongsTo(models.User, { foreignKey:"UserId" })
     }
   }
   Profile.init({
@@ -63,9 +63,8 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    dateOfBirth: DataTypes.DATE,
-    phoneNumber: {
-      type: DataTypes.STRING,
+    dateOfBirth: {
+      type: DataTypes.DATE,
       allowNull: false,
       validate: {
         notEmpty: {
@@ -73,6 +72,18 @@ module.exports = (sequelize, DataTypes) => {
         },
         notNull: {
           msg: "Date Of Birth is required"
+        }
+      }
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Phone Number is required"
+        },
+        notNull: {
+          msg: "Phone Number is required"
         }
       }
     },
@@ -85,6 +96,18 @@ module.exports = (sequelize, DataTypes) => {
         },
         notNull: {
           msg: "ImageUrl is required"
+        }
+      }
+    },
+    bloodType: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Blood Type is required"
+        },
+        notNull: {
+          msg: "Blood Type is required"
         }
       }
     }
