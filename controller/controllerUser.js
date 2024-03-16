@@ -36,7 +36,7 @@ class ControllerUser {
             if (!email || !password) {
                 throw { name: "Badrequest", message: "Email and password is required" }
             }
-            const user = await user.findOne({
+            const user = await User.findOne({
                 where: {
                     email
                 }
