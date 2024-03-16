@@ -5,6 +5,6 @@ const router = express.Router()
 
 
 router.post("/", authentication, ControllerRecipient.recipientPost)
-router.get("/", authentication, ControllerRecipient.recipientGetAll)
+router.get("/", ControllerRecipient.recipientGetAll)
 
 module.exports = router

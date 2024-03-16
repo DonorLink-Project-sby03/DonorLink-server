@@ -14,9 +14,42 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Donor.init({
-    UserId: DataTypes.INTEGER,
-    RecipientId: DataTypes.INTEGER,
-    bloodType: DataTypes.STRING
+    UserId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "User Id is required"
+        },
+        notNull: {
+          msg: "User Id is required"
+        }
+      }
+    },
+    RecipientId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Recipient Id is required"
+        },
+        notNull: {
+          msg: "Recipient Id is required"
+        }
+      }
+    },
+    stock: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Stock Id is required"
+        },
+        notNull: {
+          msg: "Stock Id is required"
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Donor',
