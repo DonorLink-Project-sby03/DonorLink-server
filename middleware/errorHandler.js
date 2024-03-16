@@ -1,4 +1,5 @@
 const errorHandler = (err, req, res, next) => {
+    console.log(err,'<<< error');
     let message = "Internal server error"
     let status = 500
 
@@ -22,7 +23,7 @@ const errorHandler = (err, req, res, next) => {
             break;
     }
 
-    console.log(err,'<<< error middleware');
+
     res.status(status).json({ message })
 }
 
