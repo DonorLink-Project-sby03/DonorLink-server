@@ -27,6 +27,39 @@ class ControllerUser {
             next(error)
         }
     }
+
+    static async login(req, res, next) {
+        try {
+            const { email, password } = req.body
+            if (!email || !password) {
+                throw { name: "Badrequest", message: "Email and password is required" }
+            }
+            const user = await user.findOne({
+                where: {
+                    email
+                }
+            })
+            if (!user) {
+                throw { name: "Unauthorized", message: "Invalid email/password" }
+            }
+
+            const compare = comparePassword(password, user.password)
+            if (!compare) {
+                throw { name: "Unauthorized", message: "Invalid email/password" }
+            }
+
+            const createToken = signToken({
+                id: user.id
+            })
+
+            res.status(200).json({
+                access_token: createToken
+            })
+
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 module.exports = ControllerUser
