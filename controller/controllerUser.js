@@ -43,12 +43,12 @@ class ControllerUser {
                 }
             })
             if (!user) {
-                throw { name: "Unauthorized", message: "Invalid email/password" }
+                throw { name: "Unauthorized", message: "Invalid email or password" }
             }
 
             const compare = comparePassword(password, user.password)
             if (!compare) {
-                throw { name: "Unauthorized", message: "Invalid email/password" }
+                throw { name: "Unauthorized", message: "Invalid email or password" }
             }
 
             const createToken = signToken({
