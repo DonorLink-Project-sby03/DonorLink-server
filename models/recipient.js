@@ -14,11 +14,78 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Recipient.init({
-    UserId: DataTypes.INTEGER,
-    stock: DataTypes.INTEGER,
-    location: DataTypes.STRING,
-    image: DataTypes.STRING,
-    bloodType: DataTypes.STRING
+    UserId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "User id is required"
+        },
+        notNull: {
+          msg: "User id is required"
+        }
+      }
+    },
+    stock: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Stock is required"
+        },
+        notNull: {
+          msg: "Stock is required"
+        }
+      }
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Location is required"
+        },
+        notNull: {
+          msg: "Location is required"
+        }
+      }
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Image is required"
+        },
+        notNull: {
+          msg: "Image is required"
+        }
+      }
+    },
+    bloodType: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Blood type is required"
+        },
+        notNull: {
+          msg: "Blood type is required"
+        }
+      }
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Description is required"
+        },
+        notNull: {
+          msg: "Description is required"
+        }
+      }
+    },
   }, {
     sequelize,
     modelName: 'Recipient',
