@@ -52,18 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "Image is required"
-        },
-        notNull: {
-          msg: "Image is required"
-        }
-      }
-    },
+    image: DataTypes.STRING,
     bloodType: {
       type: DataTypes.STRING,
       allowNull: false,

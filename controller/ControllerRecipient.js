@@ -1,4 +1,6 @@
+const { Op } = require("sequelize");
 const {Recipient, User, Donor, DonorConfirmation} = require("../models/index")
+const cloudinary = require("cloudinary").v2;
 
 class ControllerRecipient {
     static async recipientPost(req, res, next) {
@@ -16,14 +18,27 @@ class ControllerRecipient {
     }
 
     static async recipientGetAll(req, res, next) {
-        console.log("<<<MasukAll");
         try {
-            let result = await Recipient.findAll({
+            const {search} = req.query
+
+            let option = {
                 include: {
                     model: User,
                     attributes: { exclude: ['password'] }
                 }
-            })
+            }
+
+            // Feature Search
+            if(search) {
+                option.where = {
+                    location: {
+                        [Op.iLike]: `%${search}%`
+                    }
+                }
+            }
+            
+
+            let result = await Recipient.findAll(option)
 
             res.status(200).json(result)
         } catch (err) {
@@ -32,7 +47,6 @@ class ControllerRecipient {
     }
 
     static async recipientGetById(req, res, next) {
-        console.log("<<<Masuk by Id");
         try {
             const {id} = req.params
 
@@ -55,6 +69,44 @@ class ControllerRecipient {
             })
 
             res.status(200).json(result)
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    static async patchRecipientImageProfile(req, res, next) {
+        try {
+            const {id} = req.params
+
+            if(!req.file) {
+                throw {name: "ImageBedRequest", message: "Image must be upload"}
+            }
+
+            const b64File = Buffer.from(req.file.buffer).toString("base64")
+            const dataURI = `data:${req.file.mimetype};base64,${b64File}`
+
+            const uploadFile = await cloudinary.uploader
+            .upload(dataURI, {
+                resource_type: "auto",
+                folder: "recipient",
+                public_id: req.file.originalname
+            })
+
+            await Recipient.update({image: uploadFile.secure_url}, {
+                where: {
+                    id
+                }
+            })
+
+            let dataRecipient = await Recipient.findByPk(id)
+
+            if(!dataRecipient) {
+                throw {name: "Notfound", message: "Data not found"}
+            }
+
+            res.status(200).json({
+                message: `Image succes to update`
+            })
         } catch (err) {
             next(err)
         }
