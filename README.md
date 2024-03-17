@@ -11,6 +11,7 @@ List of available endpoint:
 - `POST /donorconfirmation/:DonorId` -
 - `GET /profile`-
 - `POST /profile`-
+- `POST /recipients`-
 
 ## address Aplication Server
 
@@ -183,6 +184,7 @@ _Response (201)_
 ```
 
 ## 6. GET /profile
+
 Request:
 
 - headers:
@@ -197,31 +199,32 @@ _Response (200 - ok)_
 
 ```json
 {
-"id": "integer",
-    "UserId": "integer",
-    "identityNumber": "string",
-    "gender": "string",
-    "address": "string",
-    "job": "string",
-    "dateOfBirth": "date",
-    "phoneNumber": "string",
-    "imageUrl": "string",
-    "bloodType": "string",
+  "id": "integer",
+  "UserId": "integer",
+  "identityNumber": "string",
+  "gender": "string",
+  "address": "string",
+  "job": "string",
+  "dateOfBirth": "date",
+  "phoneNumber": "string",
+  "imageUrl": "string",
+  "bloodType": "string",
+  "createdAt": "date",
+  "updatedAt": "date",
+  "User": {
+    "id": "integer",
+    "name": "string",
+    "email": "string",
+    "username": "string",
+    "password": "string",
     "createdAt": "date",
-    "updatedAt": "date",
-    "User": {
-        "id": "integer",
-        "name": "string",
-        "email": "string",
-        "username": "string",
-        "password": "string",
-        "createdAt": "date",
-        "updatedAt": "date"
-    }
+    "updatedAt": "date"
+  }
 }
 ```
 
 ## 7. POST /profile
+
 Request:
 
 - body:
@@ -248,6 +251,7 @@ Request:
 ```
 
 _Response (201 - ok)_
+
 ```json
 {
   "id": "integer",
@@ -263,4 +267,93 @@ _Response (201 - ok)_
   "updatedAt": "date",
   "createdAt": "date"
 }
+```
+
+## 8. POST /recipients
+
+Request:
+
+-body:
+
+````json
+{
+  "stock": "integer",
+  "location": "string",
+  "image": "string",
+  "bloodType": "string",
+  "description": "string"
+}
+
+-access_token:
+{
+  "id":"integer"
+}
+
+_Response (201)_
+
+```json
+{
+  "stock": "integer",
+  "location": "string",
+  "image": "string",
+  "bloodType": "string",
+  "description": "string",
+  "UserId": "integer"
+}
+
+````
+
+_Response (400 - BadRequest)_
+
+```json
+{
+  "message": "Stock is required",
+  "or"
+  "message": "Location is required",
+  "or"
+  "message": "Image is required",
+  "or"
+  "message": "Blood type is required",
+  "or"
+  "message": "Description is required"
+}
+```
+
+## 9. GET /recipients
+
+_Response (200 - oke)_
+
+```json
+{
+  "UserId": "integer",
+  "stock": "integer",
+  "location": "string",
+  "image": "string",
+  "bloodType": "integer",
+  "User": [
+    {
+      "name": "string",
+      "email": "string",
+      "userName": "string"
+    }
+  ]
+}
+```
+
+## 10. /recipients/:id
+
+Request:
+
+-params:
+
+```json
+{
+  "id": "integer"
+}
+```
+
+_Response (200 - ok)_
+
+```json
+{}
 ```
