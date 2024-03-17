@@ -1,4 +1,4 @@
-const {Recipient, User} = require("../models/index")
+const {Recipient, User, Donor, DonorConfirmation} = require("../models/index")
 
 class ControllerRecipient {
     static async recipientPost(req, res, next) {
@@ -16,12 +16,42 @@ class ControllerRecipient {
     }
 
     static async recipientGetAll(req, res, next) {
+        console.log("<<<MasukAll");
         try {
             let result = await Recipient.findAll({
                 include: {
                     model: User,
                     attributes: { exclude: ['password'] }
                 }
+            })
+
+            res.status(200).json(result)
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    static async recipientGetById(req, res, next) {
+        console.log("<<<Masuk by Id");
+        try {
+            const {id} = req.params
+
+            let result = await Recipient.findOne({
+                where: {
+                    id
+                },
+                include: [
+                    {
+                        model: User,
+                        attributes: { exclude: ['password'] }
+                    },
+                    {
+                        model: Donor,
+                        include: {
+                            model: DonorConfirmation
+                        }
+                    }
+                ]
             })
 
             res.status(200).json(result)
