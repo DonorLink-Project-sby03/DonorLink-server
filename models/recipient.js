@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Recipient.belongsTo(models.User, {foreignKey: "UserId"})
+      Recipient.hasMany(models.Donor, {foreignKey: "RecipientId"})
     }
   }
   Recipient.init({
