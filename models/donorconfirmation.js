@@ -14,9 +14,42 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   DonorConfirmation.init({
-    DonorId: DataTypes.INTEGER,
-    location: DataTypes.STRING,
-    image: DataTypes.STRING
+    DonorId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Donor Id is required"
+        },
+        notNull: {
+          msg: "Donor Id is required"
+        }
+      }
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Location is required"
+        },
+        notNull: {
+          msg: "Location is required"
+        }
+      }
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Image is required"
+        },
+        notNull: {
+          msg: "Image is required"
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'DonorConfirmation',
