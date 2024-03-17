@@ -6,6 +6,11 @@ List of available endpoint:
 
 - `POST /register`-
 - `POST /login`-
+- `POST /donors/:RecipientId`-
+- `GET /donors`-
+- `POST /donorconfirmation/:DonorId` -
+- `GET /profile`-
+- `POST /profile`-
 
 ## address Aplication Server
 
@@ -174,5 +179,88 @@ _Response (201)_
   "DonorId": "integer",
   "location": "string",
   "image": "string"
+}
+```
+
+## 6. GET /profile
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "integer"
+}
+```
+
+_Response (200 - ok)_
+
+```json
+{
+"id": "integer",
+    "UserId": "integer",
+    "identityNumber": "string",
+    "gender": "string",
+    "address": "string",
+    "job": "string",
+    "dateOfBirth": "date",
+    "phoneNumber": "string",
+    "imageUrl": "string",
+    "bloodType": "string",
+    "createdAt": "date",
+    "updatedAt": "date",
+    "User": {
+        "id": "integer",
+        "name": "string",
+        "email": "string",
+        "username": "string",
+        "password": "string",
+        "createdAt": "date",
+        "updatedAt": "date"
+    }
+}
+```
+
+## 7. POST /profile
+Request:
+
+- body:
+
+```json
+{
+  "identityNumber": "string",
+  "gender": "string",
+  "address": "string",
+  "job": "string",
+  "dateOfBirth": "date",
+  "phoneNumber": "string",
+  "imageUrl": "string",
+  "bloodType": "string"
+}
+```
+
+- headers:
+
+```json
+{
+  "access_token": "integer"
+}
+```
+
+_Response (201 - ok)_
+```json
+{
+  "id": "integer",
+  "UserId": "integer",
+  "identityNumber": "string",
+  "gender": "string",
+  "address": "string",
+  "job": "string",
+  "dateOfBirth": "date",
+  "phoneNumber": "string",
+  "imageUrl": "string",
+  "bloodType": "string",
+  "updatedAt": "date",
+  "createdAt": "date"
 }
 ```
