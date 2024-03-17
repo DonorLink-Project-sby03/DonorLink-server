@@ -1,18 +1,15 @@
 const app = require('../app')
-const { User, sequelize } = require('../models/');
-const { createToken } = require('../helpers/jwt');
-const { createPassword } = require('../helpers/bcrypt');
+const { User, sequelize } = require('../models/index');
+const { hashPassword } = require('../helpers/bcrypt');
 const request = require('supertest')
 const { queryInterface } = sequelize
-
-let token;
 
 beforeAll(async()=>{
     const user = { 
         "username": "user test",
         "name":"test",
         "email": "test@example.com", 
-        "password": createPassword("123456"),
+        "password": hashPassword("123456"),
         "createdAt": new Date(),
         "updatedAt": new Date()
     }
@@ -22,7 +19,7 @@ beforeAll(async()=>{
     /*
     const seedUsers = require('../data/user.json').map(el=>{
         el.createdAt = el.updatedAt = new Date()
-        el.password = createPassword(el.password)
+        el.password = hashPassword(el.password)
         return el
     })
     await queryInterface.bulkInsert('Users', seedUsers)
@@ -104,7 +101,7 @@ describe('POST /login', ()=>{
     })
 })
 
-describe('POST /register', ()=>{
+describe('POST /users', ()=>{
     test('should response 201 - created', async()=>{
         let user = await User.create({
             name:"new user",
@@ -113,7 +110,7 @@ describe('POST /register', ()=>{
             password:'secret'
         })
 
-        const response = await request(app).post('/register').send(user)
+        const response = await request(app).post('/users').send(user)
 
         expect(response.status).toBe(201)
         expect(response.body).toHaveProperty("username", expect.any(String))
@@ -129,7 +126,7 @@ describe('POST /register', ()=>{
             password:'secretTest'
         }
 
-        const response = await request(app).post('/register').send(user)
+        const response = await request(app).post('/users').send(user)
 
         expect(response.status).toBe(400)
         expect(response.body).toHaveProperty("message", "Email must be require")
@@ -142,7 +139,7 @@ describe('POST /register', ()=>{
             password:'secret'
         }
 
-        const response = await request(app).post('/register').send(user)
+        const response = await request(app).post('/users').send(user)
 
         expect(response.status).toBe(400)
         expect(response.body).toHaveProperty("message", "Email must be unique")
@@ -155,7 +152,7 @@ describe('POST /register', ()=>{
             password:''
         }
 
-        const response = await request(app).post('/register').send(user)
+        const response = await request(app).post('/users').send(user)
 
         expect(response.status).toBe(400)
         expect(response.body).toHaveProperty("message", "Password must be require")
@@ -168,7 +165,7 @@ describe('POST /register', ()=>{
             password:'secret'
         }
 
-        const response = await request(app).post('/register').send(user)
+        const response = await request(app).post('/users').send(user)
 
         expect(response.status).toBe(400)
         expect(response.body).toHaveProperty("message", "Email must be type email")
