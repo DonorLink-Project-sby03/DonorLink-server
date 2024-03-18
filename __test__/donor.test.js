@@ -91,3 +91,56 @@ describe('GET /donors', ()=>{
     })
 })
 
+describe('POST /donors', ()=>{
+    test("should response 201 - created", async()=>{
+        let dataDonor = {
+            stock: 2
+        }
+
+        let response = await request(app).post('/donors/1').send(dataDonor).set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(201)
+        expect(response.body).toBeInstanceOf(Object)
+    })
+
+    // // error belum login
+    test("should response 401 - Invalid Token", async()=>{
+        let dataDonor = {
+            stock: 2
+        }
+
+        let response = await request(app).post('/donors/1').send(dataDonor)
+
+        expect(response.status).toBe(401)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Invalid Token")
+    })
+
+    // // error token salah
+    test("should response 401 - Invalid Token", async()=>{
+        let dataDonor = {
+            stock: 2
+        }
+
+        let wrongToken = "jfowfhwfh"
+
+        let response = await request(app).post('/donors/1').send(dataDonor).set('authorization', `Bearer ${wrongToken}`)
+
+        expect(response.status).toBe(401)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Invalid Token")
+    })
+
+    // error tdk mengisi stock
+    test("should response 400 - Stock is required", async()=>{
+        let dataDonor = {}
+
+        let response = await request(app).post('/donors/1').send(dataDonor).set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Stock is required")
+    })
+    
+})
+
