@@ -4,6 +4,11 @@ const { signToken } = require("../helpers/jwt");
 const { sequelize } = require("../models");
 const request = require('supertest')
 
+const path = require('path')
+const fs = require('fs')
+const filePath = path.resolve(__dirname, "../helpers/ketik.png")
+const imageBuffer = fs.readFileSync(filePath)
+
 let token = ''
 
 beforeAll(async()=>{
@@ -195,5 +200,42 @@ describe('POST /profile', ()=>{
         expect(response.status).toBe(401)
         expect(response.body).toBeInstanceOf(Object)
         expect(response.body).toHaveProperty("message","invalid signature")
+    })
+})
+
+describe('PATCH /profile/:id', ()=>{
+    test("should response 200 - Image succes to update", async()=>{
+        let response = await request(app).patch('/profile/2').attach("image", imageBuffer, "ketik.png").set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Image succes to update")
+    })
+
+    // error tanpa token
+    test("should response 401 - Invalid Token", async()=>{
+        let response = await request(app).patch('/profile/2').attach("image", imageBuffer, "ketik.png")
+
+        expect(response.status).toBe(401)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Invalid Token")
+    })
+
+    // error token salah
+    test("should response 401 - invalid signature", async()=>{
+        let response = await request(app).patch('/profile/2').attach("image", imageBuffer, "ketik.png").set('authorization', `Bearer ${token}-salah`)
+
+        expect(response.status).toBe(401)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "invalid signature")
+    })
+
+    // error gk ngirimgambar
+    test("should response 400 - Image must be upload", async()=>{
+        let response = await request(app).patch('/profile/2').attach("image").set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Image must be upload")
     })
 })
