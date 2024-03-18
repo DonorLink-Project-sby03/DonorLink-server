@@ -5,6 +5,15 @@ const cloudinary = require("cloudinary").v2;
 class ControllerProfile {
     static async addProfile(req, res, next) {
         try {
+            let profileCheck = await Profile.findOne({
+                where:{
+                    UserId:req.user.id
+                }
+            })
+            if(profileCheck){
+                throw {name:"Badrequest", message:"Already have profile"}
+            }
+
             let { identityNumber, gender, address, job, dateOfBirth, phoneNumber, imageUrl, bloodType } = req.body
 
             let profile = await Profile.create({ UserId: req.user.id, identityNumber, gender, address, job, dateOfBirth, phoneNumber, imageUrl, bloodType })
@@ -17,7 +26,15 @@ class ControllerProfile {
 
     static async getProfile(req, res, next){
         try {
-            let profile = await Profile.findOne({UserId:req.user.id, include: User })
+            let profile = await Profile.findOne({
+                UserId:req.user.id,
+                include: {
+                    model: User,
+                    where: {
+                        id: req.user.id
+                    }
+                }
+            })
             res.status(200).json(profile)
         } catch (error) {
             next(error)
