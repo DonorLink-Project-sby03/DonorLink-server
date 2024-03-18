@@ -37,7 +37,7 @@ beforeAll(async()=>{
                 UserId: login.id
             },
         ]
-        await sequelize.bulkInsert("Recipients", recipient, {})
+        await sequelize.queryInterface.bulkInsert("Recipients", recipient, {})
         
     } catch (error) {
         console.log(error,'<< error before all testing recipient');
@@ -60,6 +60,7 @@ afterAll(async()=>{
 description('GET /recipients', ()=>{
     test("should response 200 - OK", async()=>{
         let response = await request(app).get('/recipients')
+        console.log(response.body,'<<< get recipients');
 
         expect(response.status).toBe(200)
         expect(response.body).toBeInstanceOf(Array)

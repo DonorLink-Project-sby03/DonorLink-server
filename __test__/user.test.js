@@ -1,5 +1,5 @@
 const app = require('../app')
-const { User, sequelize } = require('../models/index');
+const { sequelize } = require('../models/index');
 const { hashPassword } = require('../helpers/bcrypt');
 const request = require('supertest')
 
@@ -37,7 +37,7 @@ afterAll(async()=>{
     })
 })
 
-describe.skip('POST /login', ()=>{
+describe('POST /login', ()=>{
     test('shoult response with status code 200', async ()=>{
         const login = { //nanti diganti user yg dari user.json
             "email": "test@example.com", 
@@ -59,6 +59,7 @@ describe.skip('POST /login', ()=>{
         }
 
         const respon = await request(app).post('/login').send(user)
+        console.log(respon.body,'<< respon login tanpa email');
 
         expect(respon.status).toBe(400)
         expect(respon.body).toHaveProperty("message", "Email and password is required")
@@ -85,8 +86,6 @@ describe.skip('POST /login', ()=>{
         }
 
         const respon = await request(app).post('/login').send(user)
-        console.log(respon.status,'<status 400 password');
-        console.log(respon.body,'<< body login 400');
 
         expect(respon.status).toBe(400)
         expect(respon.body).toHaveProperty("message", "Email and password is required")
@@ -108,12 +107,12 @@ describe.skip('POST /login', ()=>{
 
 describe('POST /users', ()=>{
     test('should response 201 - created', async()=>{
-        let user = await User.create({
+        let user = {
             name:"new user",
             username:"user", 
             email:"user@gmail.com", 
             password:'secret'
-        })
+        }
 
         const response = await request(app).post('/users').send(user)
 
