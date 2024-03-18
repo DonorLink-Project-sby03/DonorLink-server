@@ -96,6 +96,15 @@ describe('GET /recipients/:id', ()=>{
         expect(response.body).toHaveProperty("description", expect.any(String))
         expect(response.body).toHaveProperty("UserId", expect.any(Number))
     })
+
+    // jika id tdk ada
+    test("should response 404 - OK", async()=>{
+        let response = await request(app).get('/recipients/100')
+
+        expect(response.status).toBe(404)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Recipient Not Found")
+    })
 })
 
 describe('POST /recipients', ()=>{
@@ -129,6 +138,23 @@ describe('POST /recipients', ()=>{
         expect(response.status).toBe(401)
         expect(response.body).toBeInstanceOf(Object)
         expect(response.body).toHaveProperty("message", "Invalid Token")
+    })
+
+    // error token salah
+    test("should response 401 - created", async()=>{
+        let recipient = {
+            stock: 2, 
+            location: "surabaya", 
+            image: "string.jpg", 
+            bloodType: 'AB', 
+            description: "testing data recipient tiga"
+        }
+
+        let response = await request(app).post('/recipients').send(recipient).set('authorization', `Bearer ${token}-salah`)
+
+        expect(response.status).toBe(401)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "invalid signature")
     })
 
     // error tdk mengisi lokasi
@@ -217,5 +243,14 @@ describe('PATCH /recipients/:id', ()=>{
         expect(response.status).toBe(401)
         expect(response.body).toBeInstanceOf(Object)
         expect(response.body).toHaveProperty("message", "Invalid Token")
+    })
+
+    // error salah token
+    test("should response 401 - invalid signature", async()=>{
+        let response = await request(app).patch('/recipients/2').attach("image", imageBuffer, "ketik.png").set('authorization', `Bearer ${token}-salah`)
+
+        expect(response.status).toBe(401)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "invalid signature")
     })
 })
