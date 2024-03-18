@@ -75,3 +75,19 @@ afterAll(async()=>{
         restartIdentity: true
     })
 })
+
+describe('GET /donors', ()=>{
+    test("should response 200 - OK", async()=>{
+        let response = await request(app).get('/donors').set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeInstanceOf(Array)
+        expect(response.body[0]).toHaveProperty("id", expect.any(Number))
+        expect(response.body[0]).toHaveProperty("UserId", expect.any(Number))
+        expect(response.body[0]).toHaveProperty("RecipientId", expect.any(Number))
+        expect(response.body[0]).toHaveProperty("stock", expect.any(Number))
+        expect(response.body[0]).toHaveProperty("Recipient", expect.any(Object))
+        expect(response.body[0]).toHaveProperty("DonorConfirmation", expect.any(null || Object))
+    })
+})
+

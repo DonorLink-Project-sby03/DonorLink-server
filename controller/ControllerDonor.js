@@ -33,6 +33,9 @@ class ControllerDonor {
                             model: User,
                             attributes: { exclude: ['password'] }
                         }
+                    },
+                    {
+                        model: DonorConfirmation,
                     }
                 ]
             })
