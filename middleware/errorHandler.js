@@ -19,13 +19,8 @@ const errorHandler = (err, req, res, next) => {
             status = 400
             break;
         case "Notfound":
-            console.log("<<Masuk");
             message = err.message
             status = 404
-            break;
-        case "ImageBedRequest":
-            message = err.message
-            status = 400
             break;
         default:
             break;

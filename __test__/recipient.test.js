@@ -253,4 +253,13 @@ describe('PATCH /recipients/:id', ()=>{
         expect(response.body).toBeInstanceOf(Object)
         expect(response.body).toHaveProperty("message", "invalid signature")
     })
+
+    // error gk ngirimgambar
+    test("should response 400 - Image must be upload", async()=>{
+        let response = await request(app).patch('/recipients/2').attach("image").set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Image must be upload")
+    })
 })
