@@ -49,10 +49,10 @@ class ControllerDonor {
     static async postDonorConfirmation(req, res, next) {
         try {
             const {DonorId} = req.params
-            const {location, image} = req.body
+            const {location} = req.body
 
             // insert data to table DonorConfirmation
-            let result = await DonorConfirmation.create({DonorId, location, image})
+            let result = await DonorConfirmation.create({DonorId, location})
 
             res.status(201).json(result)
         } catch (err) {
@@ -65,7 +65,7 @@ class ControllerDonor {
             const {id} = req.params
 
             if(!req.file) {
-                throw {name: "ImageBedRequest", message: "Image must be upload"}
+                throw {name: "Badrequest", message: "Image must be upload"}
             }
 
             const b64File = Buffer.from(req.file.buffer).toString("base64")

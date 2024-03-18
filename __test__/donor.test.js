@@ -103,7 +103,7 @@ describe('POST /donors', ()=>{
         expect(response.body).toBeInstanceOf(Object)
     })
 
-    // // error belum login
+    // error belum login
     test("should response 401 - Invalid Token", async()=>{
         let dataDonor = {
             stock: 2
@@ -116,7 +116,7 @@ describe('POST /donors', ()=>{
         expect(response.body).toHaveProperty("message", "Invalid Token")
     })
 
-    // // error token salah
+    // error token salah
     test("should response 401 - Invalid Token", async()=>{
         let dataDonor = {
             stock: 2
@@ -128,7 +128,7 @@ describe('POST /donors', ()=>{
 
         expect(response.status).toBe(401)
         expect(response.body).toBeInstanceOf(Object)
-        expect(response.body).toHaveProperty("message", "Invalid Token")
+        expect(response.body).toHaveProperty("message", "jwt malformed")
     })
 
     // error tdk mengisi stock
@@ -144,3 +144,94 @@ describe('POST /donors', ()=>{
     
 })
 
+describe('POST /donorconfirmation', ()=>{
+    test("should response 201 - created", async()=>{
+        let dataDonor = {
+            location: "Mataram"
+        }
+
+        let response = await request(app).post('/donorconfirmation/1').send(dataDonor).set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(201)
+        expect(response.body).toBeInstanceOf(Object)
+    })
+
+    // error belum login
+    test("should response 401 - Invalid Token", async()=>{
+        let dataDonor = {
+            location: "Mataram"
+        }
+
+        let response = await request(app).post('/donorconfirmation/1').send(dataDonor)
+
+        expect(response.status).toBe(401)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Invalid Token")
+    })
+
+    // error token salah
+    test("should response 401 - Invalid Token", async()=>{
+        let dataDonor = {
+            location: "Mataram"
+        }
+
+        let wrongToken = "jfowfhwfh"
+
+        let response = await request(app).post('/donorconfirmation/1').send(dataDonor).set('authorization', `Bearer ${wrongToken}`)
+
+        expect(response.status).toBe(401)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "jwt malformed")
+    })
+
+    // error tdk mengisi stock
+    test("should response 400 - Stock is required", async()=>{
+        let dataDonor = {}
+
+        let response = await request(app).post('/donorconfirmation/1').send(dataDonor).set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Location is required")
+    })
+    
+})
+
+describe('PATCH /donorconfirmation/:id', ()=>{
+    test("should response 200 - Image succes to update", async()=>{
+        let response = await request(app).patch('/donorconfirmation/1').attach("image", imageBuffer, "ketik.png").set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Image succes to update")
+    })
+
+    // error belum login
+    test("should response 401 - Invalid Token", async()=>{
+        let response = await request(app).patch('/donorconfirmation/1').attach("image", imageBuffer, "ketik.png")
+
+        expect(response.status).toBe(401)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Invalid Token")
+    })
+
+    // error token salah
+    test("should response 401 - Invalid Token", async()=>{
+        let wrongToken = "jfowfhwfh"
+
+        let response = await request(app).patch('/donorconfirmation/1').attach("image", imageBuffer, "ketik.png").set('authorization', `Bearer ${wrongToken}`)
+
+        expect(response.status).toBe(401)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "jwt malformed")
+    })
+
+    // error gk ngirimgambar
+    test("should response 400 - Image must be upload", async()=>{
+        let response = await request(app).patch('/donorconfirmation/1').attach("image").set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Image must be upload")
+    })
+})

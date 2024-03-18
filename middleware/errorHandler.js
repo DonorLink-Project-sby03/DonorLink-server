@@ -10,6 +10,9 @@ const errorHandler = (err, req, res, next) => {
             status = 400
             break;
         case "Unauthorized":
+            message = err.message
+            status = 401
+            break;
         case "JsonWebTokenError":
             message = err.message
             status = 401
