@@ -28,8 +28,7 @@ module.exports = {
         allowNull: false
       },
       image: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.STRING
       },
       bloodType: {
         type: Sequelize.STRING,

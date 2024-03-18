@@ -12,6 +12,7 @@ router.get("/", (req, res) => {
 })
 
 router.post("/login", ControllerUser.login)
+router.post("/google-login", ControllerUser.googleLogin)
 
 router.use("/users", userRouter)
 router.use("/recipients", userRecipient)

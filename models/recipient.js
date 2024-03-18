@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Recipient.belongsTo(models.User, {foreignKey: "UserId"})
+      Recipient.hasMany(models.Donor, {foreignKey: "RecipientId"})
     }
   }
   Recipient.init({
@@ -51,18 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "Image is required"
-        },
-        notNull: {
-          msg: "Image is required"
-        }
-      }
-    },
+    image: DataTypes.STRING,
     bloodType: {
       type: DataTypes.STRING,
       allowNull: false,

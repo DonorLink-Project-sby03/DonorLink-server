@@ -13,12 +13,19 @@ const errorHandler = (err, req, res, next) => {
         case "JsonWebTokenError":
             message = err.message
             status = 401
+            break;
         case "Badrequest":
             message = err.message
             status = 400
+            break;
         case "Notfound":
             message = err.message
             status = 404
+            break;
+        case "ImageBedRequest":
+            message = err.message
+            status = 400
+            break;
         default:
             break;
     }

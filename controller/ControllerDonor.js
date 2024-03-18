@@ -1,4 +1,5 @@
 const {Donor, DonorConfirmation} = require("../models/index")
+const cloudinary = require("cloudinary").v2;
 
 class ControllerDonor {
     static async postDonor(req, res, next) {
@@ -43,6 +44,44 @@ class ControllerDonor {
             let result = await DonorConfirmation.create({DonorId, location, image})
 
             res.status(201).json(result)
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    static async patchDonorConfirmationImageProfile(req, res, next) {
+        try {
+            const {id} = req.params
+
+            if(!req.file) {
+                throw {name: "ImageBedRequest", message: "Image must be upload"}
+            }
+
+            const b64File = Buffer.from(req.file.buffer).toString("base64")
+            const dataURI = `data:${req.file.mimetype};base64,${b64File}`
+
+            const uploadFile = await cloudinary.uploader
+            .upload(dataURI, {
+                resource_type: "auto",
+                folder: "donor_confirmation",
+                public_id: req.file.originalname
+            })
+
+            await DonorConfirmation.update({image: uploadFile.secure_url}, {
+                where: {
+                    id
+                }
+            })
+
+            let dataDonorConfirmation = await DonorConfirmation.findByPk(id)
+
+            if(!dataDonorConfirmation) {
+                throw {name: "Notfound", message: "Data not found"}
+            }
+
+            res.status(200).json({
+                message: `Image succes to update`
+            })
         } catch (err) {
             next(err)
         }

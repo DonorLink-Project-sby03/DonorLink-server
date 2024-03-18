@@ -1,5 +1,6 @@
 const { Profile } = require("../models/index")
 const { User } = require("../models/index")
+const cloudinary = require("cloudinary").v2;
 
 class ControllerProfile {
     static async addProfile(req, res, next) {
@@ -18,6 +19,44 @@ class ControllerProfile {
         try {
             let profile = await Profile.findOne({UserId:req.user.id, include: User })
             res.status(200).json(profile)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    static async patchImageProfile(req, res, next){
+        try {
+            const {id} = req.params
+
+            if(!req.file) {
+                throw {name: "ImageBedRequest", message: "Image must be upload"}
+            }
+
+            const b64File = Buffer.from(req.file.buffer).toString("base64")
+            const dataURI = `data:${req.file.mimetype};base64,${b64File}`
+
+            const uploadFile = await cloudinary.uploader
+            .upload(dataURI, {
+                resource_type: "auto",
+                folder: "profile",
+                public_id: req.file.originalname
+            })
+
+            await Profile.update({imageUrl: uploadFile.secure_url}, {
+                where: {
+                    id
+                }
+            })
+
+            let dataProfile = await Profile.findByPk(id)
+
+            if(!dataProfile) {
+                throw {name: "Notfound", message: "Data not found"}
+            }
+
+            res.status(200).json({
+                message: `Image succes to update`
+            })
         } catch (error) {
             next(error)
         }
