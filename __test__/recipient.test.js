@@ -3,7 +3,10 @@ const { hashPassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
 const { sequelize } = require("../models");
 const request = require("supertest")
-const filePath = path.resolve(__dirname, "")
+
+const path = require('path')
+const fs = require('fs')
+const filePath = path.resolve(__dirname, "../helpers/ketik.png")
 const imageBuffer = fs.readFileSync(filePath)
 
 let token= ''
@@ -197,30 +200,22 @@ describe('POST /recipients', ()=>{
     })
 })
 
-// describe('PATCH /recipients/:id', ()=>{
-//     test("should response 200 - Image succes to update", async()=>{
-//         let response = await request(app).patch('/lodgings/3').attach("imageUrl", imageBuffer, "ketik.jpg").set('authorization', `Bearer ${token}`)
+describe('PATCH /recipients/:id', ()=>{
+    test("should response 200 - Image succes to update", async()=>{
+        let response = await request(app).patch('/recipients/2').attach("image", imageBuffer, "ketik.png").set('authorization', `Bearer ${token}`)
 
 
-//         expect(response.status).toBe(200)
-//         expect(response.body).toBeInstanceOf(Object)
-//         expect(response.body).toHaveProperty("message", "Image succes to update")
-//     })
+        expect(response.status).toBe(200)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Image succes to update")
+    })
 
-//     // error belum login
-//     test("should response 401 - Invalid Token", async()=>{
-//         let recipient = {
-//             stock: 2, 
-//             location: "surabaya", 
-//             image: "string.jpg", 
-//             bloodType: 'AB', 
-//             description: "testing data recipient tiga"
-//         }
+    // error belum login
+    test("should response 401 - Invalid Token", async()=>{
+        let response = await request(app).patch('/recipients/2').attach("imageUrl", imageBuffer, "ketik.png")
 
-//         let response = await request(app).post('/recipients').send(recipient)
-
-//         expect(response.status).toBe(401)
-//         expect(response.body).toBeInstanceOf(Object)
-//         expect(response.body).toHaveProperty("message", "Invalid Token")
-//     })
-// })
+        expect(response.status).toBe(401)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Invalid Token")
+    })
+})
