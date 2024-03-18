@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Donor.belongsTo(models.Recipient, {foreignKey: "RecipientId"})
       Donor.hasOne(models.DonorConfirmation, {foreignKey: "DonorId"})
+      Donor.belongsTo(models.User, {foreignKey: "UserId"})
     }
   }
   Donor.init({
