@@ -1,4 +1,4 @@
-const { User } = require("../models/index")
+const { User, Profile } = require("../models/index")
 const { comparePassword } = require("../helpers/bcrypt")
 const { signToken } = require("../helpers/jwt")
 const {OAuth2Client} = require('google-auth-library');
@@ -19,14 +19,17 @@ class ControllerUser {
 
     static async findUser(req, res, next) {
         try {
-            let user = await User.findByPk(req.user.id)
-
-            res.status(200).json({
-                id: user.id,
-                name: user.name,
-                username: user.username,
-                email: user.email
+            let user = await User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                include: {
+                    model: Profile
+                },
+                attributes: { exclude: ['password'] }
             })
+
+            res.status(200).json(user)
         } catch (error) {
             next(error)
         }
