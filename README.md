@@ -12,6 +12,8 @@ List of available endpoint:
 - `GET /profile`-
 - `POST /profile`-
 - `POST /recipients`-
+- `GET /recipients` -
+- `GET /recipients/:id` -
 
 ## address Aplication Server
 
@@ -355,5 +357,33 @@ Request:
 _Response (200 - ok)_
 
 ```json
-{}
+{
+  "UserId": "integer",
+  "stock": "integer",
+  "location": "integer",
+  "image": "string",
+  "bloodType": "string",
+  "Users": [
+    {
+      "name": "string",
+      "email": "string",
+      "userName": "string"
+    }
+  ],
+  "Donors": [
+    {
+      "UserId": "integer",
+      "stock": "integer",
+      "RecipientId": "integer",
+      "bloodType": "string",
+      "DonorConfimation": [
+        {
+          "DonorId": "integer",
+          "location": "string",
+          "image": "string"
+        }
+      ]
+    }
+  ]
+}
 ```
