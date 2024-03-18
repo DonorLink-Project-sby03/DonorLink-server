@@ -8,6 +8,6 @@ const upload = multer({ storage: multer.memoryStorage() })
 
 router.post("/:DonorId", authentication, ControllerDonor.postDonorConfirmation)
 
-router.patch("/:id", upload.single('image'), ControllerDonor.patchDonorConfirmationImageProfile)
+router.patch("/:id", authentication, upload.single('image'), ControllerDonor.patchDonorConfirmationImageProfile)
 
 module.exports = router
