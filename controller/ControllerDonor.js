@@ -1,4 +1,4 @@
-const {Donor, DonorConfirmation} = require("../models/index")
+const {Donor, DonorConfirmation, User, Recipient} = require("../models/index")
 const cloudinary = require("cloudinary").v2;
 
 class ControllerDonor {
@@ -25,12 +25,23 @@ class ControllerDonor {
             let result = await Donor.findAll({
                 where: {
                     UserId
-                }
+                },
+                include: [
+                    {
+                        model: Recipient,
+                        include: {
+                            model: User,
+                            attributes: { exclude: ['password'] }
+                        }
+                    },
+                    {
+                        model: DonorConfirmation,
+                    }
+                ]
             })
 
             res.status(200).json(result)
         } catch (err) {
-            console.log(err, "<EErr");
             next(err)
         }
     }
