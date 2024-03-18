@@ -85,7 +85,7 @@ class ControllerRecipient {
             const {id} = req.params
 
             if(!req.file) {
-                throw {name: "ImageBedRequest", message: "Image must be upload"}
+                throw {name: "Badrequest", message: "Image must be upload"}
             }
 
             const b64File = Buffer.from(req.file.buffer).toString("base64")

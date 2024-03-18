@@ -16,18 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Recipient.init({
-    UserId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "User id is required"
-        },
-        notNull: {
-          msg: "User id is required"
-        }
-      }
-    },
+    UserId: DataTypes.INTEGER,
     stock: {
       type: DataTypes.INTEGER,
       allowNull: false,
