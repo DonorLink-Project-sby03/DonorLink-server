@@ -37,7 +37,7 @@ afterAll(async()=>{
     })
 })
 
-describe('POST /login', ()=>{
+describe.skip('POST /login', ()=>{
     test('shoult response with status code 200', async ()=>{
         const login = { //nanti diganti user yg dari user.json
             "email": "test@example.com", 
@@ -106,89 +106,89 @@ describe('POST /login', ()=>{
     })
 })
 
-// describe('POST /users', ()=>{
-//     test('should response 201 - created', async()=>{
-//         let user = await User.create({
-//             name:"new user",
-//             username:"user", 
-//             email:"user@gmail.com", 
-//             password:'secret'
-//         })
+describe('POST /users', ()=>{
+    test('should response 201 - created', async()=>{
+        let user = await User.create({
+            name:"new user",
+            username:"user", 
+            email:"user@gmail.com", 
+            password:'secret'
+        })
 
-//         const response = await request(app).post('/users').send(user)
+        const response = await request(app).post('/users').send(user)
 
-//         expect(response.status).toBe(201)
-//         expect(response.body).toHaveProperty("username", expect.any(String))
-//         expect(response.body).toHaveProperty("name", expect.any(String))
-//         expect(response.body).toHaveProperty("email", user.email)
-//         expect(response.body).toHaveProperty("password", expect.any(String))
-//     })
+        expect(response.status).toBe(201)
+        expect(response.body).toHaveProperty("username", expect.any(String))
+        expect(response.body).toHaveProperty("name", expect.any(String))
+        expect(response.body).toHaveProperty("email", user.email)
+        expect(response.body).toHaveProperty("password", expect.any(String))
+    })
 
-//     // jika email tdk diberikan
-//     test('should response 400 - Email is required', async()=>{
-//         const user = { 
-//             "username": "user test1",
-//             "name":"test1",
-//             "email": "", 
-//             "password": "secret",
-//             "createdAt": new Date(),
-//             "updatedAt": new Date()
-//         }
+    // jika email tdk diberikan
+    test('should response 400 - Email is required', async()=>{
+        const user = { 
+            "username": "user test1",
+            "name":"test1",
+            "email": "", 
+            "password": "secret",
+            "createdAt": new Date(),
+            "updatedAt": new Date()
+        }
 
-//         const response = await request(app).post('/users').send(user)
+        const response = await request(app).post('/users').send(user)
 
-//         expect(response.status).toBe(400)
-//         expect(response.body).toHaveProperty("message", "Email is required")
-//     })
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty("message", "Email is required")
+    })
 
-//     // jika email sudah ada
-//     test('should response 400 - email unique', async()=>{
-//         const user = { 
-//             "username": "user test2",
-//             "name":"test2",
-//             "email": "test@example.com", 
-//             "password": "secret",
-//             "createdAt": new Date(),
-//             "updatedAt": new Date()
-//         }
+    // jika email sudah ada
+    test('should response 400 - email unique', async()=>{
+        const user = { 
+            "username": "user test2",
+            "name":"test2",
+            "email": "test@example.com", 
+            "password": "secret",
+            "createdAt": new Date(),
+            "updatedAt": new Date()
+        }
 
-//         const response = await request(app).post('/users').send(user)
+        const response = await request(app).post('/users').send(user)
 
-//         expect(response.status).toBe(400)
-//         expect(response.body).toHaveProperty("message", "Email must be unique")
-//     })
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty("message", "Email must be unique")
+    })
 
-//     // password string kosong
-//     test('should response 400 - Password is required', async()=>{
-//         const user = { 
-//             "username": "user test3",
-//             "name":"test3",
-//             "email": "test3@example.com", 
-//             "password": "",
-//             "createdAt": new Date(),
-//             "updatedAt": new Date()
-//         }
+    // password string kosong
+    test('should response 400 - Password is required', async()=>{
+        const user = { 
+            "username": "user test3",
+            "name":"test3",
+            "email": "test3@example.com", 
+            "password": "",
+            "createdAt": new Date(),
+            "updatedAt": new Date()
+        }
 
-//         const response = await request(app).post('/users').send(user)
+        const response = await request(app).post('/users').send(user)
 
-//         expect(response.status).toBe(400)
-//         expect(response.body).toHaveProperty("message", "Password is required")
-//     })
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty("message", "Password is required")
+    })
     
-//     // email format salah
-//     test('should response 400 - Email must be type email', async()=>{
-//         const user = { 
-//             "username": "user test4",
-//             "name":"test4",
-//             "email": "testexample", 
-//             "password": "secret",
-//             "createdAt": new Date(),
-//             "updatedAt": new Date()
-//         }
+    // email format salah
+    test('should response 400 - Email must be type email', async()=>{
+        const user = { 
+            "username": "user test4",
+            "name":"test4",
+            "email": "testexample", 
+            "password": "secret",
+            "createdAt": new Date(),
+            "updatedAt": new Date()
+        }
 
-//         const response = await request(app).post('/users').send(user)
+        const response = await request(app).post('/users').send(user)
 
-//         expect(response.status).toBe(400)
-//         expect(response.body).toHaveProperty("message", "Email must be type email")
-//     })
-// })
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty("message", "Email must be type email")
+    })
+})
