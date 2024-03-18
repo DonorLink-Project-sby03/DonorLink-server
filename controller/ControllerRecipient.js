@@ -50,6 +50,12 @@ class ControllerRecipient {
         try {
             const {id} = req.params
 
+            let dataRecipient = await Recipient.findByPk(id)
+
+            if(!dataRecipient) {
+                throw {name: "Notfound", message: "Recipient Not Found"}
+            }
+ 
             let result = await Recipient.findOne({
                 where: {
                     id

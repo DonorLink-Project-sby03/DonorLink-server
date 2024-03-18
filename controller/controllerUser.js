@@ -33,7 +33,6 @@ class ControllerUser {
     }
 
     static async login(req, res, next) {
-        console.log("<<Masuk Login");
         try {
             const { email, password } = req.body
             if (!email || !password) {

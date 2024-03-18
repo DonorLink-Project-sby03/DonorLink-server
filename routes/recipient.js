@@ -11,6 +11,6 @@ router.post("/", authentication, ControllerRecipient.recipientPost)
 router.get("/", ControllerRecipient.recipientGetAll)
 router.get("/:id", ControllerRecipient.recipientGetById)
 
-router.patch("/:id", upload.single('image'), ControllerRecipient.patchRecipientImageProfile)
+router.patch("/:id", authentication, upload.single('image'), ControllerRecipient.patchRecipientImageProfile)
 
 module.exports = router
