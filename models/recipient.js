@@ -42,6 +42,8 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     image: DataTypes.STRING,
+    latitude: DataTypes.STRING,
+    longitude: DataTypes.STRING,
     bloodType: {
       type: DataTypes.STRING,
       allowNull: false,
