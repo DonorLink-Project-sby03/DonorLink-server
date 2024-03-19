@@ -115,10 +115,10 @@ class ControllerDonor {
     static async postDonorConfirmation(req, res, next) {
         try {
             const {DonorId} = req.params
-            const {location} = req.body
+            const {location, stock} = req.body
 
             // insert data to table DonorConfirmation
-            let result = await DonorConfirmation.create({DonorId, location})
+            let result = await DonorConfirmation.create({DonorId, location, stock})
 
             res.status(201).json(result)
         } catch (err) {
