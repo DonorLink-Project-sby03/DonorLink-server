@@ -25,6 +25,10 @@ const errorHandler = (err, req, res, next) => {
             message = err.message
             status = 404
             break;
+        case "NotAcceptable":
+            message = err.message
+            status = 406
+            break;
         default:
             break;
     }

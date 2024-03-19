@@ -120,7 +120,6 @@ describe('POST /users', ()=>{
         expect(response.body).toHaveProperty("username", expect.any(String))
         expect(response.body).toHaveProperty("name", expect.any(String))
         expect(response.body).toHaveProperty("email", user.email)
-        expect(response.body).toHaveProperty("password", expect.any(String))
     })
 
     // jika email tdk diberikan

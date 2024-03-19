@@ -11,7 +11,12 @@ class ControllerUser {
 
             let newUser = await User.create({ name, email, username, password })
 
-            res.status(201).json(newUser)
+            res.status(201).json({
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email,
+                username: newUser.username
+            })
         } catch (error) {
             next(error)
         }
