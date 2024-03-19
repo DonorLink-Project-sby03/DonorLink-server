@@ -1,4 +1,4 @@
-const {Donor, DonorConfirmation, User, Recipient} = require("../models/index")
+const {Donor, DonorConfirmation, User, Recipient, Profile} = require("../models/index")
 const cloudinary = require("cloudinary").v2;
 
 class ControllerDonor {
@@ -8,8 +8,74 @@ class ControllerDonor {
             const UserId = req.user.id
             const {RecipientId} = req.params
 
+            // find user include profile
+            let findUser = await User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                include: {
+                    model: Profile
+                },
+                attributes: { exclude: ['password'] }
+            })
+
+
+            if(!findUser.Profile) {
+                throw { name: "NotAcceptable", message: "Please complete your profile" }
+            }
+
+            // find recipient
+            const findRecipient = await Recipient.findOne({
+                where: {
+                    id: RecipientId
+                }
+            })
+
+            // check is the blood type the same
+            if(findUser.Profile.bloodType === "AB+") {
+                if(findRecipient.bloodType !== "AB+") {
+                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
+                }
+            }
+
+            if(findUser.Profile.bloodType === "AB-") {
+                if(findRecipient.bloodType !== "AB+" || findRecipient.bloodType !== "AB-") {
+                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
+                }
+            }
+
+            if(findUser.Profile.bloodType === "B+") {
+                if(findRecipient.bloodType !== "B+") {
+                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
+                }
+            }
+
+            if(findUser.Profile.bloodType === "B-") {
+                if(findRecipient.bloodType !== "AB+" || findRecipient.bloodType !== "AB-" || findRecipient.bloodType !== "B+" || findRecipient.bloodType !== "B-") {
+                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
+                }
+            }
+
+            if(findUser.Profile.bloodType === "A+") {
+                if(findRecipient.bloodType !== "A+" || findRecipient.bloodTypee !== "AB+") {
+                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
+                }
+            }
+
+            if(findUser.Profile.bloodType === "A-") {
+                if(findRecipient.bloodType !== "AB+" || findRecipient.bloodType !== "AB-" || findRecipient.bloodType !== "A+" || findRecipient.bloodType !== "A-") {
+                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
+                }
+            }
+
+            if(findUser.Profile.bloodType === "O+") {
+                if(findRecipient.bloodType !== "O+" || findRecipient.bloodType !== "A+" || findRecipient.bloodType !== "B+" || findRecipient.bloodType !== "AB+") {
+                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
+                }
+            }
+
             // insert data to table Donor
-            let result = await Donor.create({stock, UserId, RecipientId})
+            let result = await Donor.create({UserId, RecipientId})
 
             res.status(201).json(result)
         } catch (err) {

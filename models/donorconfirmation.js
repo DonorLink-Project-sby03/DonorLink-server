@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    stock: DataTypes.INTEGER,
     image: DataTypes.STRING
   }, {
     sequelize,

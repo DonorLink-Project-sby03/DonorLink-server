@@ -19,18 +19,6 @@ module.exports = (sequelize, DataTypes) => {
   Donor.init({
     UserId: DataTypes.INTEGER,
     RecipientId: DataTypes.INTEGER,
-    stock: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "Stock is required"
-        },
-        notNull: {
-          msg: "Stock is required"
-        }
-      }
-    }
   }, {
     sequelize,
     modelName: 'Donor',
