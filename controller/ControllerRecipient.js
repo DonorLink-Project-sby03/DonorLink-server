@@ -9,23 +9,30 @@ class ControllerRecipient {
             const {stock, location, image, bloodType, description} = req.body
             const UserId = req.user.id
 
-            let newLocation = location.split("-")
 
-            // Hit API location
-            const response = await axios.request({
-                method: 'GET',
-                url: 'https://forward-reverse-geocoding.p.rapidapi.com/v1/forward',
-                params: {
-                  city: newLocation[0],
-                  state: newLocation[1],
-                  'accept-language': 'en',
-                  polygon_threshold: '0.0'
-                },
-                headers: {
-                  'X-RapidAPI-Key': process.env.RAPID_API_KEY,
-                  'X-RapidAPI-Host': process.env.RAPID_API_HOST
-                }
-              });
+            if(!location) {
+                throw {name: "Badrequest", message: "Location is required"}
+            }
+
+                let newLocation = location.split("-")
+
+                // Hit API location
+                const response = await axios.request({
+                    method: 'GET',
+                    url: 'https://forward-reverse-geocoding.p.rapidapi.com/v1/forward',
+                    params: {
+                    city: newLocation[0],
+                    state: newLocation[1],
+                    'accept-language': 'en',
+                    polygon_threshold: '0.0'
+                    },
+                    headers: {
+                    'X-RapidAPI-Key': process.env.RAPID_API_KEY,
+                    'X-RapidAPI-Host': process.env.RAPID_API_HOST
+                    }
+                });
+            
+            
 
             // insert data to table recipients
             let result = await Recipient.create({stock, location, image, bloodType, description, UserId, latitude: response.data[0].lat, longitude: response.data[0].lon})
