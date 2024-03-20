@@ -59,7 +59,10 @@ class ControllerRecipient {
                             model: DonorConfirmation
                         }
                     }
-                ]
+                ],
+                order: [
+                    ['createdAt', 'ASC'],
+                ],
             }
 
             // Feature Search
