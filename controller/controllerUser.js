@@ -73,38 +73,38 @@ class ControllerUser {
         }
     }
 
-    static async googleLogin(req, res, next) {
-        try {
-            console.log(req.headers);
-            const ticket = await client.verifyIdToken({
-                idToken: req.headers.google_token,
-                audience: process.env.GOOGLE_CLIENT_ID,
-            });
-            const payload = ticket.getPayload();
+    // static async googleLogin(req, res, next) {
+    //     try {
+    //         console.log(req.headers);
+    //         const ticket = await client.verifyIdToken({
+    //             idToken: req.headers.google_token,
+    //             audience: process.env.GOOGLE_CLIENT_ID,
+    //         });
+    //         const payload = ticket.getPayload();
 
-            // make random for dummy password and username
-            const random = Math.random()
-            const time = new Date().getMilliseconds()
+    //         // make random for dummy password and username
+    //         const random = Math.random()
+    //         const time = new Date().getMilliseconds()
 
-            // find or create user in database
-            const [user, created] = await User.findOrCreate({
-                where: { email: payload.email },
-                defaults: {
-                  name: `${payload.given_name} ${payload.family_name}`,
-                  email: payload.email,
-                  password: 'psw-fr' + random + time,
-                  username: 'user-fr' + random + time
-                },
-                hooks: false
-            });
+    //         // find or create user in database
+    //         const [user, created] = await User.findOrCreate({
+    //             where: { email: payload.email },
+    //             defaults: {
+    //               name: `${payload.given_name} ${payload.family_name}`,
+    //               email: payload.email,
+    //               password: 'psw-fr' + random + time,
+    //               username: 'user-fr' + random + time
+    //             },
+    //             hooks: false
+    //         });
 
-            const access_token = signToken({id: user.id})
+    //         const access_token = signToken({id: user.id})
 
-            res.status(200).json({access_token})
-        } catch (err) {
-            next(err)
-        }
-    }
+    //         res.status(200).json({access_token})
+    //     } catch (err) {
+    //         next(err)
+    //     }
+    // }
 }
 
 module.exports = ControllerUser

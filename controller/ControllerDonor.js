@@ -34,48 +34,25 @@ class ControllerDonor {
             console.log(findUser.Profile.bloodType, "<<findUser.Profile.bloodType");
             console.log(findRecipient.bloodType, "<<findRecipient.bloodType");
 
-            // check is the blood type the same
-            if(findUser.Profile.bloodType === "AB+") {
-                if(findRecipient.bloodType !== "AB+") {
-                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
-                }
-            }
 
-            if(findUser.Profile.bloodType === "AB-") {
-                if(findRecipient.bloodType !== "AB+" && findRecipient.bloodType !== "AB-") {
-                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
-                }
-            }
+             // Cek apakah golongan darah cocok
+        const userBloodType = findUser.Profile.bloodType;
+        const recipientBloodType = findRecipient.bloodType;
 
-            if(findUser.Profile.bloodType === "B+") {
-                if(findRecipient.bloodType !== "B+") {
-                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
-                }
-            }
+        const bloodTypeCompatibility = {
+            "A+": ["A+", "AB+"],
+            "A-": ["A+", "A-", "AB+", "AB-"],
+            "B+": ["B+", "AB+"],
+            "B-": ["B+", "B-", "AB+", "AB-"],
+            "AB+": ["AB+"],
+            "AB-": ["AB+", "AB-", "A-", "B-"],
+            "O+": ["O+", "A+", "B+", "AB+"],
+            "O-": ["O+", "O-"]
+        };
 
-            if(findUser.Profile.bloodType === "B-") {
-                if(findRecipient.bloodType !== "AB+" && findRecipient.bloodType !== "AB-" && findRecipient.bloodType !== "B+" && findRecipient.bloodType !== "B-") {
-                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
-                }
-            }
-
-            if(findUser.Profile.bloodType === "A+") {
-                if(findRecipient.bloodType !== "A+" && findRecipient.bloodTypee !== "AB+") {
-                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
-                }
-            }
-
-            if(findUser.Profile.bloodType === "A-") {
-                if(findRecipient.bloodType !== "AB+" && findRecipient.bloodType !== "AB-" && findRecipient.bloodType !== "A+" && findRecipient.bloodType !== "A-") {
-                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
-                }
-            }
-
-            if(findUser.Profile.bloodType === "O+") {
-                if(findRecipient.bloodType !== "O+" && findRecipient.bloodType !== "A+" && findRecipient.bloodType !== "B+" && findRecipient.bloodType !== "AB+") {
-                    throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." }
-                }
-            }
+        if (!bloodTypeCompatibility[userBloodType] || !bloodTypeCompatibility[userBloodType].includes(recipientBloodType)) {
+            throw { name: "NotAcceptable", message: "Sorry your blood type is not suitable for donation." };
+        }
 
             // insert data to table Donor
             let result = await Donor.create({UserId, RecipientId})

@@ -15,6 +15,8 @@ let token3 = ""
 let token4 = ""
 let token5 = ""
 let token6 = ""
+let token7 = ""
+let token8 = ""
 
 beforeAll(async()=>{
     try {
@@ -66,6 +68,22 @@ beforeAll(async()=>{
                 "password": hashPassword("12345"),
                 "createdAt": new Date(),
                 "updatedAt": new Date()
+            },
+            {
+                "username": "padli",
+                "name":"Padli",
+                "email": "padl@mail.com", 
+                "password": hashPassword("12345"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                "username": "mukti",
+                "name":"Mukti",
+                "email": "mukt@mail.com", 
+                "password": hashPassword("12345"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
             }
         ]
         await sequelize.queryInterface.bulkInsert('Users', user, {})
@@ -75,6 +93,8 @@ beforeAll(async()=>{
         token4 = signToken({id:4})
         token5 = signToken({id:5})
         token6 = signToken({id:6})
+        token7 = signToken({id:7})
+        token8 = signToken({id:8})
 
 
         const profile = [
@@ -142,6 +162,32 @@ beforeAll(async()=>{
                 "bloodType": "B-",
                 "updatedAt": new Date(),
                 "createdAt": new Date()
+            },
+            {
+                "UserId": 7,
+                "identityNumber": "7654321",
+                "gender": "male",
+                "address": "Mataram",
+                "job": "Swasta",
+                "dateOfBirth": "1999-04-04",
+                "phoneNumber": "4092184",
+                "imageUrl": "image.jpg",
+                "bloodType": "A-",
+                "updatedAt": new Date(),
+                "createdAt": new Date()
+            },
+            {
+                "UserId": 8,
+                "identityNumber": "7654321",
+                "gender": "male",
+                "address": "Mataram",
+                "job": "Swasta",
+                "dateOfBirth": "1999-04-04",
+                "phoneNumber": "4092184",
+                "imageUrl": "image.jpg",
+                "bloodType": "O+",
+                "updatedAt": new Date(),
+                "createdAt": new Date()
             }
         ]
         await sequelize.queryInterface.bulkInsert("Profiles", profile, {})
@@ -162,6 +208,16 @@ beforeAll(async()=>{
                 location: "mujur-nusa tenggara barat", 
                 image: "string.jpg", 
                 bloodType: 'A+', 
+                description: "testing data recipient",
+                UserId: 1,
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                stock: 500, 
+                location: "cakranegara-nusa tenggara barat", 
+                image: "string.jpg", 
+                bloodType: 'AB-', 
                 description: "testing data recipient",
                 UserId: 1,
                 "createdAt": new Date(),
@@ -248,6 +304,24 @@ describe('POST /donors', ()=>{
     // Error jenis darah tidak cocok B-
     test("should response 406 - Sorry your blood type is not suitable for donation.", async()=>{
         let response = await request(app).post('/donors/2').set('authorization', `Bearer ${token6}`)
+
+        expect(response.status).toBe(406)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Sorry your blood type is not suitable for donation.")
+    })
+
+    // Error jenis darah tidak cocok A-
+    test("should response 406 - Sorry your blood type is not suitable for donation.", async()=>{
+        let response = await request(app).post('/donors/1').set('authorization', `Bearer ${token7}`)
+
+        expect(response.status).toBe(406)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Sorry your blood type is not suitable for donation.")
+    })
+
+    // Error jenis darah tidak cocok O+
+    test("should response 406 - Sorry your blood type is not suitable for donation.", async()=>{
+        let response = await request(app).post('/donors/3').set('authorization', `Bearer ${token8}`)
 
         expect(response.status).toBe(406)
         expect(response.body).toBeInstanceOf(Object)

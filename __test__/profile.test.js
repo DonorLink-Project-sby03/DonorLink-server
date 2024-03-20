@@ -10,6 +10,14 @@ const filePath = path.resolve(__dirname, "../helpers/ketik.png")
 const imageBuffer = fs.readFileSync(filePath)
 
 let token = ''
+let token2 = ""
+let token3 = ""
+let token4 = ""
+let token5 = ""
+let token6 = ""
+let token7 = ""
+let token8 = ""
+let token9 = ""
 
 beforeAll(async()=>{
     try {
@@ -37,10 +45,66 @@ beforeAll(async()=>{
                 "password": hashPassword("123456"),
                 "createdAt": new Date(),
                 "updatedAt": new Date()
+            },
+            {
+                "username": "user test5",
+                "name":"test5",
+                "email": "test5@example.com", 
+                "password": hashPassword("123456"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                "username": "user test6",
+                "name":"test6",
+                "email": "test6@example.com", 
+                "password": hashPassword("123456"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                "username": "user test7",
+                "name":"test7",
+                "email": "test7@example.com", 
+                "password": hashPassword("123456"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                "username": "user test8",
+                "name":"test8",
+                "email": "test8@example.com", 
+                "password": hashPassword("123456"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                "username": "user test9",
+                "name":"test9",
+                "email": "test9@example.com", 
+                "password": hashPassword("123456"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                "username": "user test10",
+                "name":"test10",
+                "email": "test10@example.com", 
+                "password": hashPassword("123456"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
             }
         ]
         await sequelize.queryInterface.bulkInsert("Users", user, {})
         token = signToken({id:1})
+        token2 = signToken({id:2})
+        token3 = signToken({id:3})
+        token4 = signToken({id:4})
+        token5 = signToken({id:5})
+        token6 = signToken({id:6})
+        token7 = signToken({id:7})
+        token8 = signToken({id:8})
+        token9 = signToken({id:9})
 
         const profile = [
             {
@@ -127,8 +191,8 @@ describe('POST /profile', ()=>{
             "imageUrl": "image.jpg",
             "bloodType": "O"
         }
-        token = signToken({id:2})
-        let response = await request(app).post('/profile').send(profile).set("authorization", `Bearer ${token}`)
+        // token = signToken({id:2})
+        let response = await request(app).post('/profile').send(profile).set("authorization", `Bearer ${token2}`)
 
         expect(response.status).toBe(201)
         expect(response.body).toBeInstanceOf(Object)
@@ -142,6 +206,147 @@ describe('POST /profile', ()=>{
         expect(response.body).toHaveProperty("phoneNumber", profile.phoneNumber)
         expect(response.body).toHaveProperty("imageUrl", profile.imageUrl)
         expect(response.body).toHaveProperty("bloodType", profile.bloodType)
+    })
+
+    // Identity number tidak di input
+    test("should response 400 - created", async()=>{
+        let profile = {
+            "identityNumber": "",
+            "gender": "male",
+            "address": "surabaya",
+            "job": "-",
+            "dateOfBirth": "2000-04-04",
+            "phoneNumber": "4092184",
+            "imageUrl": "image.jpg",
+            "bloodType": "O"
+        }
+
+        let response = await request(app).post('/profile').send(profile).set("authorization", `Bearer ${token3}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Identity Number is required")
+    })
+
+    // gender tidak di input
+    test("should response 400 - created", async()=>{
+        let profile = {
+            "identityNumber": "34252",
+            "gender": "",
+            "address": "surabaya",
+            "job": "-",
+            "dateOfBirth": "2000-04-04",
+            "phoneNumber": "4092184",
+            "imageUrl": "image.jpg",
+            "bloodType": "O"
+        }
+
+        let response = await request(app).post('/profile').send(profile).set("authorization", `Bearer ${token4}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Gender is required")
+    })
+
+    // Address tidak di input
+    test("should response 400 - created", async()=>{
+        let profile = {
+            "identityNumber": "34252",
+            "gender": "male",
+            "address": "",
+            "job": "-",
+            "dateOfBirth": "2000-04-04",
+            "phoneNumber": "4092184",
+            "imageUrl": "image.jpg",
+            "bloodType": "O"
+        }
+
+        let response = await request(app).post('/profile').send(profile).set("authorization", `Bearer ${token5}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Address is required")
+    })
+
+    // Job tidak di input
+    test("should response 400 - created", async()=>{
+        let profile = {
+            "identityNumber": "34252",
+            "gender": "male",
+            "address": "Jakarta",
+            "job": "",
+            "dateOfBirth": "2000-04-04",
+            "phoneNumber": "4092184",
+            "imageUrl": "image.jpg",
+            "bloodType": "O"
+        }
+
+        let response = await request(app).post('/profile').send(profile).set("authorization", `Bearer ${token6}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Job is required")
+    })
+    
+    // Date Of Birth tidak di input
+    test("should response 400 - created", async()=>{
+        let profile = {
+            "identityNumber": "34252",
+            "gender": "male",
+            "address": "Jakarta",
+            "job": "-",
+            "dateOfBirth": "",
+            "phoneNumber": "4092184",
+            "imageUrl": "image.jpg",
+            "bloodType": "O"
+        }
+
+        let response = await request(app).post('/profile').send(profile).set("authorization", `Bearer ${token7}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Date Of Birth is required")
+    })
+    
+    // Phone Number tidak di input
+    test("should response 400 - created", async()=>{
+        let profile = {
+            "identityNumber": "34252",
+            "gender": "male",
+            "address": "Jakarta",
+            "job": "-",
+            "dateOfBirth": "2000-04-04",
+            "phoneNumber": "",
+            "imageUrl": "image.jpg",
+            "bloodType": "O"
+        }
+
+        let response = await request(app).post('/profile').send(profile).set("authorization", `Bearer ${token8}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Phone Number is required")
+    })
+    
+
+    // Blood Type tidak di input
+    test("should response 400 - created", async()=>{
+        let profile = {
+            "identityNumber": "34252",
+            "gender": "male",
+            "address": "Jakarta",
+            "job": "-",
+            "dateOfBirth": "2000-04-04",
+            "phoneNumber": "72492347",
+            "imageUrl": "image.jpg",
+            "bloodType": ""
+        }
+
+        let response = await request(app).post('/profile').send(profile).set("authorization", `Bearer ${token9}`)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Blood Type is required")
     })
 
     // sudah punya profile
