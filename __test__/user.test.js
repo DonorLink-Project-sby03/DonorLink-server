@@ -1,7 +1,11 @@
 const app = require('../app')
 const { sequelize } = require('../models/index');
 const { hashPassword } = require('../helpers/bcrypt');
+const { signToken } = require("../helpers/jwt");
 const request = require('supertest')
+
+
+let token= ''
 
 beforeAll(async()=>{
     try {
@@ -14,6 +18,8 @@ beforeAll(async()=>{
             "updatedAt": new Date()
         }]
         await sequelize.queryInterface.bulkInsert('Users', user, {})
+
+        token = signToken({id:1})
     
         // jika ada data usernya
         /*
@@ -241,5 +247,19 @@ describe('POST /users', ()=>{
 
         expect(response.status).toBe(400)
         expect(response.body).toHaveProperty("message", "username must be unique")
+    })
+})
+
+describe('GET /users', ()=>{
+    test("should response 200 - OK", async()=>{
+        let response = await request(app).get('/users').set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("id", expect.any(Number))
+        expect(response.body).toHaveProperty("name", expect.any(String))
+        expect(response.body).toHaveProperty("email", expect.any(String))
+        expect(response.body).toHaveProperty("username", expect.any(String))
+        expect(response.body).toHaveProperty("Profile", expect.any(Object))
     })
 })
