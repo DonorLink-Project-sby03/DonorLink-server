@@ -9,11 +9,13 @@ List of available endpoint:
 - `POST /donors/:RecipientId`-
 - `GET /donors`-
 - `POST /donorconfirmation/:DonorId` -
+- `PATCH /donorconfirmation/:id`-
 - `GET /profile`-
 - `POST /profile`-
 - `POST /recipients`-
 - `GET /recipients` -
 - `GET /recipients/:id` -
+- `PATCH /recipients/:id` -
 
 ## address Aplication Server
 
@@ -54,13 +56,13 @@ _Response (400 - BadRequest)_
 
 ```json
 {
-    "message": "Name is required",
+    "message": "name is required",
      "or"
     "message": "email is required",
     "or"
     "message": "email must be unique",
     "or"
-    "message": "user Name is required",
+    "message": "user name is required",
     "or"
     "message": "password is required",
 }
@@ -140,7 +142,24 @@ _Response (201)_
 }
 ```
 
+_Response (400 - BadRequest)_
+
+```json
+{
+  "message": "Stock is required"
+}
+```
+
 ## 4. GET /donors
+
+Request:
+
+- headers:
+
+````json
+{
+  "access_token": "integer"
+}
 
 _Response (200 - ok)_
 
@@ -151,17 +170,16 @@ _Response (200 - ok)_
   "RecipientId": "integer",
   "bloodType": "integer"
 }
-```
+````
 
 ## 5. POST /donorconfirmation/:DonorId
 
-\_Request:
+Request:
 
 - body:
 
 ```json
 {
-  "DonorId": "integer",
   "location": "string",
   "image": "string"
 }
@@ -185,7 +203,61 @@ _Response (201)_
 }
 ```
 
-## 6. GET /profile
+_Response (400 - BadRequest)_
+
+```json
+{
+  "message":"location is required",
+  "or"
+  "message": "image is required"
+}
+```
+
+## 6.PATCH /donorconfirmation/:id
+
+Request:
+
+- params:
+
+```json
+{
+  "id": "integer"
+}
+```
+
+- file:
+
+```json
+{
+  "image": "string"
+}
+```
+
+_Response (200 - ok)_
+
+```json
+{
+  "message": "Image success to update"
+}
+```
+
+_Response (400 - BadRequest)_
+
+```json
+{
+  "message": "Image must be upload"
+}
+```
+
+_Response (404 - NotFound)_
+
+```json
+{
+  "message": "Data not found"
+}
+```
+
+## 7. GET /profile
 
 Request:
 
@@ -225,7 +297,7 @@ _Response (200 - ok)_
 }
 ```
 
-## 7. POST /profile
+## 8. POST /profile
 
 Request:
 
@@ -271,11 +343,11 @@ _Response (201 - ok)_
 }
 ```
 
-## 8. POST /recipients
+## 9. POST /recipients
 
 Request:
 
--body:
+- body:
 
 ````json
 {
@@ -285,11 +357,15 @@ Request:
   "bloodType": "string",
   "description": "string"
 }
+```
+- headers:
 
--access_token:
+```json
 {
-  "id":"integer"
+  "access_token":"integer"
 }
+
+````
 
 _Response (201)_
 
@@ -302,8 +378,7 @@ _Response (201)_
   "description": "string",
   "UserId": "integer"
 }
-
-````
+```
 
 _Response (400 - BadRequest)_
 
@@ -321,7 +396,17 @@ _Response (400 - BadRequest)_
 }
 ```
 
-## 9. GET /recipients
+## 10. GET /recipients
+
+Request:
+
+- query
+
+```json
+{
+  "search": "string"
+}
+```
 
 _Response (200 - oke)_
 
@@ -342,7 +427,7 @@ _Response (200 - oke)_
 }
 ```
 
-## 10. /recipients/:id
+## 11. GET /recipients/:id
 
 Request:
 
@@ -385,5 +470,49 @@ _Response (200 - ok)_
       ]
     }
   ]
+}
+```
+
+## 12. PATCH /recipients/:id
+
+Request:
+
+- params:
+
+```json
+{
+  "id": "integer"
+}
+```
+
+- file:
+
+```json
+{
+  "image": "string"
+}
+```
+
+_Response (200 - ok)_
+
+```json
+{
+  "message": "Image success to update"
+}
+```
+
+_Response (400 - BadRequest)_
+
+```json
+{
+  "message": "Image success to update"
+}
+```
+
+_Response (404 - NotFound)_
+
+```json
+{
+  "message": "Data not found"
 }
 ```
