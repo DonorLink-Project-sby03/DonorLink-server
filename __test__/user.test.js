@@ -6,7 +6,7 @@ const request = require('supertest')
 beforeAll(async()=>{
     try {
         const user = [{ 
-            "username": "user test",
+            "username": "usertest",
             "name":"test",
             "email": "test@example.com", 
             "password": hashPassword("123456"),
@@ -188,5 +188,58 @@ describe('POST /users', ()=>{
 
         expect(response.status).toBe(400)
         expect(response.body).toHaveProperty("message", "Email must be type email")
+    })
+
+    // email format salah
+    test('should response 400 - Email must be type email', async()=>{
+        const user = { 
+            "username": "user test4",
+            "name":"test4",
+            "email": "testexample", 
+            "password": "secret",
+            "createdAt": new Date(),
+            "updatedAt": new Date()
+        }
+
+        const response = await request(app).post('/users').send(user)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty("message", "Email must be type email")
+    })
+
+    // email must be unique
+    test('should response 400 - Email must be unique', async()=>{
+        const user = { 
+            "username": "usertest5",
+            "name":"test5",
+            "email": "test@example.com", 
+            "password": "secret",
+            "createdAt": new Date(),
+            "updatedAt": new Date()
+        }
+
+        const response = await request(app).post('/users').send(user)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty("message", "Email must be unique")
+    })
+
+    
+
+    // username must be unique
+    test('should response 400 - Username must be unique', async()=>{
+        const user = { 
+            "username": "usertest",
+            "name":"test6",
+            "email": "wall@example.com", 
+            "password": "secret",
+            "createdAt": new Date(),
+            "updatedAt": new Date()
+        }
+
+        const response = await request(app).post('/users').send(user)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty("message", "username must be unique")
     })
 })

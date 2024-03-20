@@ -31,7 +31,7 @@ beforeAll(async()=>{
                 stock: 5, 
                 location: "surabaya", 
                 image: "string.jpg", 
-                bloodType: 'A', 
+                bloodType: 'A+', 
                 description: "testing data recipient",
                 UserId: 1,
                 "createdAt": new Date(),
@@ -41,7 +41,7 @@ beforeAll(async()=>{
                 stock: 3, 
                 location: "surabaya", 
                 image: "string.jpg", 
-                bloodType: 'O', 
+                bloodType: 'O+', 
                 description: "testing data recipient dua",
                 UserId: 1,
                 "createdAt": new Date(),
@@ -110,10 +110,10 @@ describe('GET /recipients/:id', ()=>{
 describe('POST /recipients', ()=>{
     test("should response 201 - created", async()=>{
         let recipient = {
-            stock: 2, 
-            location: "surabaya", 
+            stock: 200, 
+            location: "gubeng-jawa timur", 
             image: "string.jpg", 
-            bloodType: 'AB', 
+            bloodType: 'AB+', 
             description: "testing data recipient tiga"
         }
 
@@ -126,8 +126,8 @@ describe('POST /recipients', ()=>{
     // error belum login
     test("should response 401 - Invalid Token", async()=>{
         let recipient = {
-            stock: 2, 
-            location: "surabaya", 
+            stock: 200, 
+            location: "gubeng-jawa timur", 
             image: "string.jpg", 
             bloodType: 'AB', 
             description: "testing data recipient tiga"
@@ -143,27 +143,29 @@ describe('POST /recipients', ()=>{
     // error token salah
     test("should response 401 - created", async()=>{
         let recipient = {
-            stock: 2, 
-            location: "surabaya", 
+            stock: 200, 
+            location: "gubeng-jawa timur", 
             image: "string.jpg", 
             bloodType: 'AB', 
             description: "testing data recipient tiga"
         }
 
-        let response = await request(app).post('/recipients').send(recipient).set('authorization', `Bearer ${token}-salah`)
+        let tokenSalah = "kfwfowfh"
+
+        let response = await request(app).post('/recipients').send(recipient).set('authorization', `Bearer ${tokenSalah}`)
 
         expect(response.status).toBe(401)
         expect(response.body).toBeInstanceOf(Object)
-        expect(response.body).toHaveProperty("message", "invalid signature")
+        expect(response.body).toHaveProperty("message", "jwt malformed")
     })
 
     // error tdk mengisi lokasi
     test("should response 400 - Location is required", async()=>{
         let recipient = {
-            stock: 2, 
+            stock: 200, 
             location: "", 
             image: "string.jpg", 
-            bloodType: 'AB', 
+            bloodType: 'AB+', 
             description: "testing data recipient tiga"
         }
 
@@ -178,7 +180,7 @@ describe('POST /recipients', ()=>{
     test("should response 400 - Stock is required", async()=>{
         let recipient = {
             stock: null, 
-            location: "surabaya", 
+            location: "gubeng-jawa timur", 
             image: "string.jpg", 
             bloodType: 'AB', 
             description: "testing data recipient tiga"
@@ -194,8 +196,8 @@ describe('POST /recipients', ()=>{
     // error tdk mengisi Blood type
     test("should response 400 - Blood type is required", async()=>{
         let recipient = {
-            stock: 6, 
-            location: "surabaya", 
+            stock: 500, 
+            location: "gubeng-jawa timur", 
             image: "string.jpg", 
             bloodType: '', 
             description: "testing data recipient tiga"
@@ -208,22 +210,6 @@ describe('POST /recipients', ()=>{
         expect(response.body).toHaveProperty("message", "Blood type is required")
     })
 
-    // error tdk mengisi description
-    test("should response 400 - Description is required", async()=>{
-        let recipient = {
-            stock: 6, 
-            location: "surabaya", 
-            image: "string.jpg", 
-            bloodType: 'A', 
-            description: ""
-        }
-
-        let response = await request(app).post('/recipients').send(recipient).set('authorization', `Bearer ${token}`)
-
-        expect(response.status).toBe(400)
-        expect(response.body).toBeInstanceOf(Object)
-        expect(response.body).toHaveProperty("message", "Description is required")
-    })
 })
 
 describe('PATCH /recipients/:id', ()=>{

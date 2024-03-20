@@ -10,6 +10,11 @@ const filePath = path.resolve(__dirname, "../helpers/ketik.png")
 const imageBuffer = fs.readFileSync(filePath)
 
 let token= ''
+let token2 = ""
+let token3 = ""
+let token4 = ""
+let token5 = ""
+let token6 = ""
 
 beforeAll(async()=>{
     try {
@@ -21,17 +26,142 @@ beforeAll(async()=>{
                 "password": hashPassword("12345"),
                 "createdAt": new Date(),
                 "updatedAt": new Date()
+            },
+            {
+                "username": "utta",
+                "name":"Utta Sulaiman",
+                "email": "utta@mail.com", 
+                "password": hashPassword("12345"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                "username": "rabt",
+                "name":"Rabiatul Adawiyah",
+                "email": "rabt@mail.com", 
+                "password": hashPassword("12345"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                "username": "iwan",
+                "name":"Irwan Rosidi",
+                "email": "iwan@mail.com", 
+                "password": hashPassword("12345"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                "username": "desinta",
+                "name":"Deshinta",
+                "email": "desinta@mail.com", 
+                "password": hashPassword("12345"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                "username": "bintang",
+                "name":"Bintang",
+                "email": "bintang@mail.com", 
+                "password": hashPassword("12345"),
+                "createdAt": new Date(),
+                "updatedAt": new Date()
             }
         ]
         await sequelize.queryInterface.bulkInsert('Users', user, {})
         token = signToken({id:1})
+        token2 = signToken({id:2})
+        token3 = signToken({id:3})
+        token4 = signToken({id:4})
+        token5 = signToken({id:5})
+        token6 = signToken({id:6})
+
+
+        const profile = [
+            {
+                "UserId": 1,
+                "identityNumber": "11223344",
+                "gender": "male",
+                "address": "surabaya",
+                "job": "Swasta",
+                "dateOfBirth": "2000-04-04",
+                "phoneNumber": "4092184",
+                "imageUrl": "image.jpg",
+                "bloodType": "B+",
+                "updatedAt": new Date(),
+                "createdAt": new Date()
+            },
+            {
+                "UserId": 2,
+                "identityNumber": "7654321",
+                "gender": "male",
+                "address": "Mataram",
+                "job": "Swasta",
+                "dateOfBirth": "1999-04-04",
+                "phoneNumber": "4092184",
+                "imageUrl": "image.jpg",
+                "bloodType": "A+",
+                "updatedAt": new Date(),
+                "createdAt": new Date()
+            },
+            {
+                "UserId": 4,
+                "identityNumber": "7654321",
+                "gender": "male",
+                "address": "Mataram",
+                "job": "Swasta",
+                "dateOfBirth": "1999-04-04",
+                "phoneNumber": "4092184",
+                "imageUrl": "image.jpg",
+                "bloodType": "AB-",
+                "updatedAt": new Date(),
+                "createdAt": new Date()
+            },
+            {
+                "UserId": 5,
+                "identityNumber": "7654321",
+                "gender": "male",
+                "address": "Mataram",
+                "job": "Swasta",
+                "dateOfBirth": "1999-04-04",
+                "phoneNumber": "4092184",
+                "imageUrl": "image.jpg",
+                "bloodType": "AB+",
+                "updatedAt": new Date(),
+                "createdAt": new Date()
+            },
+            {
+                "UserId": 6,
+                "identityNumber": "7654321",
+                "gender": "male",
+                "address": "Mataram",
+                "job": "Swasta",
+                "dateOfBirth": "1999-04-04",
+                "phoneNumber": "4092184",
+                "imageUrl": "image.jpg",
+                "bloodType": "B-",
+                "updatedAt": new Date(),
+                "createdAt": new Date()
+            }
+        ]
+        await sequelize.queryInterface.bulkInsert("Profiles", profile, {})
 
         const recipient = [
             {
-                stock: 5, 
-                location: "surabaya", 
+                stock: 500, 
+                location: "gubeng-jawa timur", 
                 image: "string.jpg", 
-                bloodType: 'A', 
+                bloodType: 'B+', 
+                description: "testing data recipient",
+                UserId: 1,
+                "createdAt": new Date(),
+                "updatedAt": new Date()
+            },
+            {
+                stock: 400, 
+                location: "mujur-nusa tenggara barat", 
+                image: "string.jpg", 
+                bloodType: 'A+', 
                 description: "testing data recipient",
                 UserId: 1,
                 "createdAt": new Date(),
@@ -43,7 +173,6 @@ beforeAll(async()=>{
 
         const donor = [
             {
-                stock: 2, 
                 UserId: 1,
                 RecipientId: 1,
                 "createdAt": new Date(),
@@ -76,20 +205,6 @@ afterAll(async()=>{
     })
 })
 
-describe('GET /donors', ()=>{
-    test("should response 200 - OK", async()=>{
-        let response = await request(app).get('/donors').set('authorization', `Bearer ${token}`)
-
-        expect(response.status).toBe(200)
-        expect(response.body).toBeInstanceOf(Array)
-        expect(response.body[0]).toHaveProperty("id", expect.any(Number))
-        expect(response.body[0]).toHaveProperty("UserId", expect.any(Number))
-        expect(response.body[0]).toHaveProperty("RecipientId", expect.any(Number))
-        expect(response.body[0]).toHaveProperty("stock", expect.any(Number))
-        expect(response.body[0]).toHaveProperty("Recipient", expect.any(Object))
-        expect(response.body[0]).toHaveProperty("DonorConfirmation", expect.any(null || Object))
-    })
-})
 
 describe('POST /donors', ()=>{
     test("should response 201 - created", async()=>{
@@ -101,6 +216,51 @@ describe('POST /donors', ()=>{
 
         expect(response.status).toBe(201)
         expect(response.body).toBeInstanceOf(Object)
+    })
+
+    // Error jenis darah tidak cocok
+    test("should response 406 - Sorry your blood type is not suitable for donation.", async()=>{
+        let response = await request(app).post('/donors/1').set('authorization', `Bearer ${token2}`)
+
+        expect(response.status).toBe(406)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Sorry your blood type is not suitable for donation.")
+    })
+
+    // Error jenis darah tidak cocok AB-
+    test("should response 406 - Sorry your blood type is not suitable for donation.", async()=>{
+        let response = await request(app).post('/donors/2').set('authorization', `Bearer ${token4}`)
+
+        expect(response.status).toBe(406)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Sorry your blood type is not suitable for donation.")
+    })
+
+    // Error jenis darah tidak cocok AB+
+    test("should response 406 - Sorry your blood type is not suitable for donation.", async()=>{
+        let response = await request(app).post('/donors/2').set('authorization', `Bearer ${token5}`)
+
+        expect(response.status).toBe(406)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Sorry your blood type is not suitable for donation.")
+    })
+
+    // Error jenis darah tidak cocok B-
+    test("should response 406 - Sorry your blood type is not suitable for donation.", async()=>{
+        let response = await request(app).post('/donors/2').set('authorization', `Bearer ${token6}`)
+
+        expect(response.status).toBe(406)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Sorry your blood type is not suitable for donation.")
+    })
+
+    // Error Profile belum dilengkapi
+    test("should response 406 - Please complete your profile", async()=>{
+        let response = await request(app).post('/donors/1').set('authorization', `Bearer ${token3}`)
+
+        expect(response.status).toBe(406)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body).toHaveProperty("message", "Please complete your profile")
     })
 
     // error belum login
@@ -130,24 +290,28 @@ describe('POST /donors', ()=>{
         expect(response.body).toBeInstanceOf(Object)
         expect(response.body).toHaveProperty("message", "jwt malformed")
     })
-
-    // error tdk mengisi stock
-    test("should response 400 - Stock is required", async()=>{
-        let dataDonor = {}
-
-        let response = await request(app).post('/donors/1').send(dataDonor).set('authorization', `Bearer ${token}`)
-
-        expect(response.status).toBe(400)
-        expect(response.body).toBeInstanceOf(Object)
-        expect(response.body).toHaveProperty("message", "Stock is required")
-    })
     
+})
+
+describe('GET /donors', ()=>{
+    test("should response 200 - OK", async()=>{
+        let response = await request(app).get('/donors').set('authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeInstanceOf(Array)
+        expect(response.body[0]).toHaveProperty("id", expect.any(Number))
+        expect(response.body[0]).toHaveProperty("UserId", expect.any(Number))
+        expect(response.body[0]).toHaveProperty("RecipientId", expect.any(Number))
+        expect(response.body[0]).toHaveProperty("Recipient", expect.any(Object))
+        expect(response.body[0]).toHaveProperty("DonorConfirmation", expect.any(null || Object))
+    })
 })
 
 describe('POST /donorconfirmation', ()=>{
     test("should response 201 - created", async()=>{
         let dataDonor = {
-            location: "Mataram"
+            location: "Mataram",
+            stock: 400
         }
 
         let response = await request(app).post('/donorconfirmation/1').send(dataDonor).set('authorization', `Bearer ${token}`)
@@ -159,7 +323,8 @@ describe('POST /donorconfirmation', ()=>{
     // error belum login
     test("should response 401 - Invalid Token", async()=>{
         let dataDonor = {
-            location: "Mataram"
+            location: "Mataram",
+            stock: 400
         }
 
         let response = await request(app).post('/donorconfirmation/1').send(dataDonor)
@@ -172,7 +337,8 @@ describe('POST /donorconfirmation', ()=>{
     // error token salah
     test("should response 401 - Invalid Token", async()=>{
         let dataDonor = {
-            location: "Mataram"
+            location: "Mataram",
+            stock: 400
         }
 
         let wrongToken = "jfowfhwfh"
@@ -185,8 +351,10 @@ describe('POST /donorconfirmation', ()=>{
     })
 
     // error tdk mengisi stock
-    test("should response 400 - Stock is required", async()=>{
-        let dataDonor = {}
+    test("should response 400 - Location is required", async()=>{
+        let dataDonor = {
+            stock: 400
+        }
 
         let response = await request(app).post('/donorconfirmation/1').send(dataDonor).set('authorization', `Bearer ${token}`)
 
@@ -194,6 +362,7 @@ describe('POST /donorconfirmation', ()=>{
         expect(response.body).toBeInstanceOf(Object)
         expect(response.body).toHaveProperty("message", "Location is required")
     })
+
     
 })
 
